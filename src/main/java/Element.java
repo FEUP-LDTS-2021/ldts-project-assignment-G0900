@@ -17,19 +17,23 @@ public class Element {
         this.color = color;
     }
 
-    public void gravityMoveDown() {}
+    public void gravityMoveDown() {position.setY(position.getY()+1);}
 
-    public Position getPosition() {return new Position(0,0);}
-    public int getPositionX() {return 0;}
-    public int getPositionY() {return 0;}
+    public Position getPosition() {return position;}
+    public int getPositionX() {return position.getX();}
+    public int getPositionY() {return position.getY();}
+    public Character getChar(){return character;}
+    public  boolean isFixedPos(){return fixedPos;}
 
-    public void setPosition(Position position) {}
+    public  void setFixedPos(boolean newFixedPos) {this.fixedPos = newFixedPos;}
+    public void setChar(Character newChar) {this.character = newChar;}
 
-    public  boolean isFixedPos(){return false;}
-    public  void setFixedPos(boolean newBool){}
+    public void draw(TextGraphics graphics) {
+        graphics.setForegroundColor(TextColor.Factory.fromString(this.color));
+        graphics.enableModifiers(SGR.BOLD);
 
-    public Character getChar() {return '_';}
-    public void setChar(Character newChar) {}
+        graphics.putString(new TerminalPosition(this.position.getX(), this.position.getY()), this.character.toString());
+    }
 
-    public void draw(TextGraphics graphics) {}
+
 }
