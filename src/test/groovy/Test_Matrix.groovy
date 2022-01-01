@@ -13,9 +13,9 @@ class Test_Matrix extends Specification {
         el1 = new Element(4, 9, ch1, "#000000")
         el2 = new Element(8, 3, ch2, "#12FF9A")
 
-        width = 3
-        height = 4
-        Matrix matrix = new Matrix(width, height)
+        width = 20
+        height = 20
+         matrix = new Matrix(width, height, '.' as Character)
 
     }
 
@@ -25,7 +25,12 @@ class Test_Matrix extends Specification {
 
         then:
         Element elem = matrix.getPos(4, 9)
-        elem.getPosition() == el1.getPosition()
+        int x =  elem.getPosition().getX()
+        int y = elem.getPosition().getY()
+
+        x == el1.getPosition().getX()
+        y == el1.getPosition().getY()
+
         elem.getChar() == el1.getChar()
 
     }
