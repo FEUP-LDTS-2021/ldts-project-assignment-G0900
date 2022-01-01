@@ -36,7 +36,7 @@ public class Application {
             e.printStackTrace();
         }
 
-
+    System.exit(0);
 
 
 
