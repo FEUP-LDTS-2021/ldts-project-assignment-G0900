@@ -17,6 +17,12 @@ public class Element {
         this.color = color;
     }
 
+    public Element(Position pos, Character character, String color) {
+        this.position.set(pos );
+        this.character = character;
+        this.color = color;
+    }
+
     public void gravityMoveDown() {position.setY(position.getY()+1);}
 
     public Position getPosition() {return position;}
@@ -33,6 +39,16 @@ public class Element {
         graphics.enableModifiers(SGR.BOLD);
 
         graphics.putString(new TerminalPosition(this.position.getX(), this.position.getY()), this.character.toString());
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (getClass() != o.getClass()) return false;
+        Element p = (Element) o;
+        return character == p.getChar() && position == p.getPosition() && fixedPos == p.isFixedPos();
     }
 
 

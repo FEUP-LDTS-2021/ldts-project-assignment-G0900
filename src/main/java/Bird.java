@@ -6,6 +6,9 @@ public class Bird extends Element {
     public Bird(int x, int y, Character character, String color) {
         super(x, y, character, color);
     }
+    public Bird(Position pos, Character character, String color) {
+        super(pos, character, color);
+    }
 
     public int takeDamage() {
         return --hp;
