@@ -43,6 +43,12 @@ public class Matrix {
         return matrix.get(y).get(x);
     }
 
+    public Element getPos(Position pos) {
+        if (pos.getX() < 0 || pos.getY() < 0 || pos.getX() >= width || pos.getY() >= height)
+            return new Element(-1, -1, 'N', "#FFFFFF"); // null Elem
+        return matrix.get(pos.getY()).get(pos.getX());
+    }
+
     public List<List<Element>> getMatrix() {
         return matrix;
     }
