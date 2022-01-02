@@ -34,21 +34,20 @@ public class Element {
     public  void setFixedPos(boolean newFixedPos) {this.fixedPos = newFixedPos;}
     public void setChar(Character newChar) {this.character = newChar;}
 
-    public void draw(TextGraphics graphics) {
-        graphics.setForegroundColor(TextColor.Factory.fromString(this.color));
-        graphics.enableModifiers(SGR.BOLD);
-
-        graphics.putString(new TerminalPosition(this.position.getX(), this.position.getY()), this.character.toString());
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
         if (getClass() != o.getClass()) return false;
         Element p = (Element) o;
-        return character == p.getChar() && position == p.getPosition() && fixedPos == p.isFixedPos();
+        return character == p.getChar() &&  p.getPosition().equals(position) && fixedPos == p.isFixedPos();
+    }
+
+    public void draw(TextGraphics graphics) {
+        graphics.setForegroundColor(TextColor.Factory.fromString(this.color));
+        graphics.enableModifiers(SGR.BOLD);
+
+        graphics.putString(new TerminalPosition(this.position.getX(), this.position.getY()), this.character.toString());
     }
 
 

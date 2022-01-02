@@ -7,7 +7,7 @@ class Test_Bird extends Specification {
     def setup() throws Exception {
         x0 = 7
         y0 = 10
-        bird = new  Bird(x0,y0, 'X' as Character,"#00FF00")
+        bird = new  Bird(x0,y0, 'B' as Character,"#00FF00")
     }
 
     def "Test takeDamage"() {
@@ -21,6 +21,14 @@ class Test_Bird extends Specification {
             hp-1 == bird.getHp()
     }
 
+    def "Test equality"(){
+        when:
+        Bird bird2 = new Bird(new Position(x0,y0), 'B' as Character, "#00FF00")
+        then:
+        bird2 == bird
+
+    }
+
     def "Test get/set Hp"() {
         given:
         int hp = 10
@@ -28,6 +36,15 @@ class Test_Bird extends Specification {
         bird.setHp(hp)
         then:
         hp == bird.getHp()
+    }
+
+    def "Test setCoinCount"() {
+        given:
+        int num = 7
+        when:
+        bird.setCoinCount(num)
+        then:
+        num == bird.getCoinCount()
     }
 
     def "Test addHp"() {

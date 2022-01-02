@@ -25,4 +25,11 @@ class Test_Block extends Specification {
         newY== y0 + deltaY
     }
 
+    def "Test equality"(){
+        when:
+        Block block2 = new Block(new Position(x0,y0),'X' as Character,"#00FF00")
+        then:
+        block == block2
+    }
+
 }
