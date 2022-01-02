@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.Random;
 
 
-
 public class Arena {
 
     //Characters
@@ -31,7 +30,7 @@ public class Arena {
     private final int width;
     private final int height;
     private final Bird bird;
-    private  Matrix matrix;
+    private Matrix matrix;
 
     Arena(int width, int height) {
         this.width = width;
@@ -78,8 +77,7 @@ public class Arena {
         String color;
         int x, y;
 
-        if (Char == blockChar)
-            color = blockColor;
+        if (Char == blockChar) color = blockColor;
         else color = coinColor;
 
         for (int i = 0; i < numberOfElem; i++) {
@@ -96,7 +94,7 @@ public class Arena {
     }
 
     public boolean moveBird(Position pos) {
-        if(canBirdMove(pos)){
+        if (canBirdMove(pos)) {
             bird.setPos(pos);
             return true;
         } else return false;
@@ -119,8 +117,7 @@ public class Arena {
         for (int y = 0; y < height; y++)
             for (int x = 0; x < width; x++) {
                 Element e = matrix.getPos(x, y);
-                if (e.getChar() != ' ')
-                    e.draw(graphics);
+                if (e.getChar() != ' ') e.draw(graphics);
             }
     }
 
@@ -134,12 +131,9 @@ public class Arena {
             for (int y = 0; y < height; y++) {
 
                 Element e = this.matrix.getPos(x, y);
-                if(e.getChar() == borderChar)
-                    newMatrix.setPos(e);
-                else if(e.getChar() == birdChar)
-                    b = e;
-                else
-                    newMatrix.setPos(new Element(x,y,' ',"#FFFFFF"));
+                if (e.getChar() == borderChar) newMatrix.setPos(e);
+                else if (e.getChar() == birdChar) b = e;
+                else newMatrix.setPos(new Element(x, y, ' ', "#FFFFFF"));
             }
 
         newMatrix.setPos(b);
@@ -154,8 +148,7 @@ public class Arena {
         applyGravity();
         matrixUpdate();
 
-        if (isMatrixBottomRowFull())
-            removeMatrixBottomRow();
+        if (isMatrixBottomRowFull()) removeMatrixBottomRow();
     }
 
     private void removeMatrixBottomRow() {
@@ -169,8 +162,7 @@ public class Arena {
 
         for (int x = 0; x < width; x++) {
             Character c = matrix.getPos(x, height - 2).getChar();
-            if (c == ' ' || c == birdChar)
-                isLineFull = false;
+            if (c == ' ' || c == birdChar) isLineFull = false;
         }
         return isLineFull;
     }
@@ -218,6 +210,7 @@ public class Arena {
         } else if (key.getKeyType() == KeyType.EOF) {
             return false;
         }
+
 
         if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
             screen.close();
