@@ -19,14 +19,6 @@ public class Matrix {
         }
     }
 
-    public void print() {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++)
-                System.out.print(matrix.get(i).get(j).getChar());
-            System.out.println();
-        }
-    }
-
     public int getWidth() {
         return width;
     }
@@ -53,6 +45,15 @@ public class Matrix {
 
     public List<List<Element>> getMatrix() {
         return matrix;
+    }
+
+
+    public void print() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++)
+                System.out.print(matrix.get(i).get(j).getChar());
+            System.out.println();
+        }
     }
 
 

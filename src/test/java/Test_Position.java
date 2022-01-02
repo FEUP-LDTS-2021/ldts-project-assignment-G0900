@@ -13,6 +13,10 @@ public class Test_Position {
 
     @Test
     public void Test_Equal_Positions(){
-        Assertions.assertFalse(position.equals(position2));
+
+        Assertions.assertNotEquals(position, position2);
+        position2.set(new Position(2,4));
+        Assertions.assertEquals(position, position2);
     }
+
 }

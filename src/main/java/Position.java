@@ -23,6 +23,11 @@ public class Position {
         this.x = x;
     }
 
+    public void set(Position pos){
+       setX(pos.getX());
+       setY(pos.getY());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
