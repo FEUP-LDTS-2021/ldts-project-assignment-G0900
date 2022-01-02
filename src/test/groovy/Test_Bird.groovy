@@ -12,12 +12,13 @@ class Test_Bird extends Specification {
 
     def "Test takeDamage"() {
         given:
-            int hp = bird.getHp()
             bird.setHp(20)
+            int hp = bird.getHp()
+
         when:
             bird.takeDamage()
         then:
-            hp == bird.getHp()-1
+            hp-1 == bird.getHp()
     }
 
     def "Test get/set Hp"() {
@@ -70,9 +71,11 @@ class Test_Bird extends Specification {
         Position pos = bird.getPosition()
         int delta = 2
         when:
-        bird.moveUp(delta)
+        Position newPos = bird.moveUp(delta)
         then:
-        bird.getPositionX() == pos.getY() - delta
+        newPos.getY() == pos.getY() - delta
+
+
     }
 
     def "Test moveDown"(){
@@ -80,9 +83,9 @@ class Test_Bird extends Specification {
         Position pos = bird.getPosition()
         int delta = 2
         when:
-        bird.moveDown(delta)
+        Position newPos =bird.moveDown(delta)
         then:
-        bird.getPositionX() == pos.getY() + delta
+        newPos.getY() == pos.getY() + delta
     }
 
     def "Test moveLeft"(){
@@ -90,9 +93,9 @@ class Test_Bird extends Specification {
         Position pos = bird.getPosition()
         int delta = 2
         when:
-        bird.moveLeft(delta)
+        Position newPos =bird.moveLeft(delta)
         then:
-        bird.getPositionX() == pos.getX() - delta
+        newPos.getX() == pos.getX() - delta
     }
 
     def "Test moveRight"(){
@@ -100,9 +103,9 @@ class Test_Bird extends Specification {
         Position pos = bird.getPosition()
         int delta = 2
         when:
-        bird.moveRight(delta)
+        Position newPos =bird.moveRight(delta)
         then:
-        bird.getPositionX() == pos.getX() + delta
+        newPos.getX() == pos.getX() + delta
     }
 
 }
