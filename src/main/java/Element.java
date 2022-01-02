@@ -34,6 +34,10 @@ public class Element {
     public  void setFixedPos(boolean newFixedPos) {this.fixedPos = newFixedPos;}
     public void setChar(Character newChar) {this.character = newChar;}
 
+    public void setPos(Position newPos){
+        position  = newPos;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
