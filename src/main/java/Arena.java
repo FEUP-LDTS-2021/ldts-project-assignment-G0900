@@ -9,6 +9,8 @@ import com.googlecode.lanterna.screen.Screen;
 import java.io.IOException;
 import java.util.Random;
 
+
+
 public class Arena {
 
     //Characters
@@ -202,6 +204,7 @@ public class Arena {
     public void drawDeathScreen(TextGraphics graphics) {
 
     }
+
 
     public boolean processKey(KeyStroke key, Screen screen) throws IOException {
         if (key.getKeyType() == KeyType.ArrowLeft) {
