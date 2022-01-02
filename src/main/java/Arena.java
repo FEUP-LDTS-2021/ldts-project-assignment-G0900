@@ -1,13 +1,21 @@
+import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TerminalSize;
+import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
+import com.googlecode.lanterna.screen.Screen;
 
+import java.io.IOException;
 import java.util.Random;
+
 
 public class Arena {
 
     //Characters
     public final static Character birdChar = 'B';
     public final static Character blockChar = 'X';
-    public final static Character borderChar = '+';
+    public final static Character borderChar = '#';
     public final static Character coinChar = 'C';
 
     //Colors
@@ -27,14 +35,15 @@ public class Arena {
     Arena(int width, int height) {
         this.width = width;
         this.height = height;
-        matrix = new Matrix(width,height,' ') ;
-        this.bird = new Bird(new Position(width/2, height/2), 'B', "#000000");
+        this.bird = new Bird(new Position(width / 2, height / 2), 'B', "#000000");
+        matrix = createMatrix(width, height, ' ');
     }
 
     Arena(int width, int height, Bird bird) {
         this.width = width;
         this.height = height;
         this.bird = bird;
+        matrix = createMatrix(width, height, ' ');
     }
 
     private int randInt(int min, int max) {
@@ -46,21 +55,49 @@ public class Arena {
         return matrix;
     }
 
-    public Matrix createMatrix() {
-        return null;
+    public Matrix createMatrix(int width, int height, Character defaultChar) {
+        Matrix temp = new Matrix(width, height, defaultChar);
+
+        for (int c = 0; c < width; c++) {
+            temp.setPos(new Element(c, 0, borderChar, borderColor));
+            temp.setPos(new Element(c, height - 1, borderChar, borderColor));
+        }
+
+        for (int r = 1; r < height - 1; r++) {
+            temp.setPos(new Element(0, r, borderChar, borderColor));
+            temp.setPos(new Element(width - 1, r, borderChar, borderColor));
+        }
+
+        temp.setPos(this.bird);
+
+        return temp;
     }
 
     public void addRandomElem(int numberOfElem, Character Char) {
+        String color;
+        int x, y;
 
+        if (Char == blockChar) color = blockColor;
+        else color = coinColor;
+
+        for (int i = 0; i < numberOfElem; i++) {
+            x = randInt(1, width - 2);
+            y = 2;
+            matrix.setPos(new Element(x, y, Char, color));
+            matrix.setPos(new Element(x, y, Char, color));
+        }
     }
-
 
     public boolean canBirdMove(Position pos) {
-        return false;
+        boolean notInBorder = pos.getX() < width - 1 && pos.getX() > 0 && pos.getY() < height - 1 && pos.getY() > 0;
+        return notInBorder;
     }
 
-    public void moveBird(Position pos) {
-
+    public boolean moveBird(Position pos) {
+        if (canBirdMove(pos)) {
+            bird.setPos(pos);
+            return true;
+        } else return false;
     }
 
     private boolean detectCollision(Matrix newM, Element b) {
@@ -77,20 +114,77 @@ public class Arena {
 
 
     private void matrixDraw(TextGraphics graphics) {
-
+        for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++) {
+                Element e = matrix.getPos(x, y);
+                if (e.getChar() != ' ') e.draw(graphics);
+            }
     }
 
 
     private void matrixUpdate() {
+        Matrix newMatrix = new Matrix(width, height, ' ');
 
+        Element b = null;
+
+        for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++) {
+
+                Element e = this.matrix.getPos(x, y);
+                if (e.getChar() == borderChar) newMatrix.setPos(e);
+                else if (e.getChar() == birdChar) b = e;
+                else newMatrix.setPos(new Element(x, y, ' ', "#FFFFFF"));
+            }
+
+        newMatrix.setPos(b);
+        this.matrix = newMatrix;
     }
 
     public boolean playerAlive() {
-        return false;
+        return bird.isAlive();
+    }
+
+    public void update(TextGraphics graphics) {
+        applyGravity();
+        matrixUpdate();
+
+        if (isMatrixBottomRowFull()) removeMatrixBottomRow();
+    }
+
+    private void removeMatrixBottomRow() {
+        for (int y = height - 2; y > 1; y--)
+            for (int x = width - 1; x > 1; x--)
+                matrix.getPos(x, y).gravityMoveDown();
+    }
+
+    private boolean isMatrixBottomRowFull() {
+        boolean isLineFull = true;
+
+        for (int x = 0; x < width; x++) {
+            Character c = matrix.getPos(x, height - 2).getChar();
+            if (c == ' ' || c == birdChar) isLineFull = false;
+        }
+        return isLineFull;
     }
 
     public void draw(TextGraphics graphics) {
+        //Set screen
+        graphics.setBackgroundColor(TextColor.Factory.fromString(bgColor));
+        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(this.width, this.height), ' ');
 
+        //Game Logic
+        update(graphics);
+
+        //Draw updated matrix
+        matrixDraw(graphics);
+
+        //draw picked up coins
+        graphics.setForegroundColor(TextColor.Factory.fromString(textColor));
+        graphics.putString(new TerminalPosition(width - 12, 1), "Score: " + bird.getCoinCount());
+
+        //draw lifePoints
+        graphics.setForegroundColor(TextColor.Factory.fromString(textColor));
+        graphics.putString(new TerminalPosition(2, 1), "HP: " + bird.getHp());
     }
 
 
@@ -100,6 +194,30 @@ public class Arena {
 
 
     public void drawDeathScreen(TextGraphics graphics) {
+
+    }
+
+
+    public boolean processKey(KeyStroke key, Screen screen) throws IOException {
+        if (key.getKeyType() == KeyType.ArrowLeft) {
+            moveBird(bird.moveLeft(1));
+        } else if (key.getKeyType() == KeyType.ArrowRight) {
+            moveBird(bird.moveRight(1));
+        } else if (key.getKeyType() == KeyType.ArrowUp) {
+            moveBird(bird.moveUp(1));
+        } else if (key.getKeyType() == KeyType.ArrowDown) {
+            moveBird(bird.moveDown(1));
+        } else if (key.getKeyType() == KeyType.EOF) {
+            return false;
+        }
+
+
+        if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
+            screen.close();
+            System.exit(0);
+        }
+
+        return true;
 
     }
 
