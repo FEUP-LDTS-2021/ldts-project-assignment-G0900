@@ -4,6 +4,21 @@ import java.util.Random;
 
 public class Arena {
 
+    //Characters
+    public final static Character birdChar = 'B';
+    public final static Character blockChar = 'X';
+    public final static Character borderChar = '+';
+    public final static Character coinChar = 'C';
+
+    //Colors
+    private final static String textColor = "#000000";
+    private final static String BirdColor = "#FFFFFF";
+    private final static String bgColor = "#3A656C";
+    private final static String coinColor = "#FFAA11";
+    private final static String blockColor = "#4B351C";
+    private final static String borderColor = "#653A6C";
+
+    //Attributes
     private final int width;
     private final int height;
     private final Bird bird;
@@ -27,8 +42,11 @@ public class Arena {
         return random.nextInt((max - (min)) + 1) + (min);
     }
 
+    public Matrix getMatrix() {
+        return matrix;
+    }
 
-    private Matrix createMatrix() {
+    public Matrix createMatrix() {
         return null;
     }
 
@@ -37,11 +55,11 @@ public class Arena {
     }
 
 
-    private boolean canBirdMove(Position pos) {
+    public boolean canBirdMove(Position pos) {
         return false;
     }
 
-    private void moveBird(Position pos) {
+    public void moveBird(Position pos) {
 
     }
 
