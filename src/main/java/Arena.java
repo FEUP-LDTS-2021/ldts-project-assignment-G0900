@@ -20,7 +20,7 @@ public class Arena {
 
     //Colors
     private final static String textColor = "#000000";
-    private final static String BirdColor = "#FFFFFF";
+    private final static String birdColor = "#FFFFFF";
     private final static String bgColor = "#3A656C";
     private final static String coinColor = "#FFAA11";
     private final static String blockColor = "#4B351C";
@@ -35,7 +35,7 @@ public class Arena {
     Arena(int width, int height) {
         this.width = width;
         this.height = height;
-        this.bird = new Bird(new Position(width / 2, height / 2), 'B', "#000000");
+        this.bird = new Bird(new Position(width / 2, height / 2), 'B', birdColor);
         matrix = createMatrix(width, height, ' ');
     }
 
@@ -106,10 +106,55 @@ public class Arena {
 
     public void applyGravity() {
 
+        for (int y = height-1; y > 1; y--)
+            for (int x = width-1; x >= 1; x--) {
+                Element e = matrix.getPos(x, y);
+                if (e.getChar() != borderChar)
+                    if (canApplyGravity(e))
+                        e.gravityMoveDown();
+            }
+
     }
 
     private boolean canApplyGravity(Element e) {
-        return false;
+        int x = e.getPositionX();
+        int y = e.getPositionY();
+
+        if(e.fixedPos) return false;
+
+        Character belowElem =  matrix.getPos(x,y+1).getChar();
+
+        boolean canApply = belowElem==' ';
+
+        //Situations
+        if(e.getChar() == blockChar && belowElem == coinChar){
+            canApply = true;
+            matrix.setPos(new Element(x,y+1,blockChar,blockColor));
+        }
+
+        else if(e.getChar() == blockChar && belowElem == birdChar){
+            canApply = true;
+            bird.takeDamage();
+        }
+
+        else if(e.getChar() == coinChar && belowElem== birdChar){
+            canApply = true;
+            bird.pickCoin(1);
+        }
+
+        else if(e.getChar() == birdChar && belowElem == coinChar){
+            canApply = true;
+            e.setPos(new Position(x,y));
+            bird.setCoinCount(bird.getCoinCount());
+            matrix.setPos(e);
+        }
+        //End of Situations
+
+
+        if(!canApply && e.getChar() != birdChar)
+            e.setFixedPos(true);
+
+        return canApply ;
     }
 
 
