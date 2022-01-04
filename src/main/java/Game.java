@@ -14,6 +14,8 @@ public class Game {
     private final Screen screen;
     private final TextGraphics graphics;
     private Arena arena;
+    private KeyStroke key;
+
 
     public Game(int width, int height) throws IOException {
 
@@ -32,6 +34,13 @@ public class Game {
 
     }
 
+    private boolean validKeyChar(Character ch) {
+        if(key!=null){
+            return key.getKeyType() != KeyType.Character && key.getCharacter() != ch;
+        }
+        return false;
+    }
+
 
     private void draw() throws IOException {
         screen.clear();
@@ -43,14 +52,36 @@ public class Game {
 
         boolean runGame = true;
 
+        KeyStroke confirmKey;
+
+
+
+
+        screen.clear();
+        arena.drawLoadingScreen(graphics);
+        screen.refresh();
+
+        do{
+            key = screen.readInput();
+        }while (validKeyChar('q'));
+
+
         do {
             draw();
-            KeyStroke key = screen.readInput();
+            key = screen.readInput();
             runGame = arena.processKey(key, screen);
             arena.addRandomElem(1,Arena.coinChar);
             arena.addRandomElem(1,Arena.blockChar);
 
-        } while (runGame);
+        } while (runGame && arena.playerAlive());
+
+        screen.clear();
+        arena.drawDeathScreen(graphics);
+        screen.refresh();
+
+        do{
+            key = screen.readInput();
+        }while (validKeyChar('q'));
 
 
     }

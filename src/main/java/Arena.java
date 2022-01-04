@@ -236,12 +236,26 @@ public class Arena {
 
 
     public void drawLoadingScreen(TextGraphics graphics) {
+        String sms = "Welcome to Run Bird run! ";
 
+        graphics.setBackgroundColor(TextColor.Factory.fromString(bgColor));
+        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(this.width, this.height), ' ');
+
+        graphics.setForegroundColor(TextColor.Factory.fromString("#FFFFFF"));
+        graphics.putString(new TerminalPosition(width/2-sms.length()/2, height/2-1), sms);
+        graphics.putString(new TerminalPosition(width/2-sms.length()/2, height/2), "Press q to start...");
     }
-
 
     public void drawDeathScreen(TextGraphics graphics) {
 
+        String sms = "You died!  Your score was "+ bird.getCoinCount() + " .";
+
+        graphics.setBackgroundColor(TextColor.Factory.fromString(bgColor));
+        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(this.width, this.height), ' ');
+
+        graphics.setForegroundColor(TextColor.Factory.fromString("#FFFFFF"));
+        graphics.putString(new TerminalPosition(width/2-sms.length()/2, height/2-1), sms);
+        graphics.putString(new TerminalPosition(width/2-sms.length()/2, height/2), "Press q to exit...");
     }
 
 
