@@ -59,13 +59,13 @@ public class Arena {
         Matrix temp = new Matrix(width, height, defaultChar);
 
         for (int c = 0; c < width; c++) {
-            temp.setPos(new Element(c, 0, borderChar, borderColor));
-            temp.setPos(new Element(c, height - 1, borderChar, borderColor));
+            temp.setPos(new Element(c, 0, borderChar, borderColor).setFixedPos(true));
+            temp.setPos(new Element(c, height - 1, borderChar, borderColor).setFixedPos(true));
         }
 
         for (int r = 1; r < height - 1; r++) {
-            temp.setPos(new Element(0, r, borderChar, borderColor));
-            temp.setPos(new Element(width - 1, r, borderChar, borderColor));
+            temp.setPos(new Element(0, r, borderChar, borderColor).setFixedPos(true));
+            temp.setPos(new Element(width - 1, r, borderChar, borderColor).setFixedPos(true));
         }
 
         temp.setPos(this.bird);
@@ -159,10 +159,13 @@ public class Arena {
 
 
     private void matrixDraw(TextGraphics graphics) {
+        //matrix.print();
         for (int y = 0; y < height; y++)
             for (int x = 0; x < width; x++) {
                 Element e = matrix.getPos(x, y);
-                if (e.getChar() != ' ') e.draw(graphics);
+                if (e.getChar() != ' ')
+                    e.draw(graphics);
+
             }
     }
 
@@ -176,9 +179,8 @@ public class Arena {
             for (int y = 0; y < height; y++) {
 
                 Element e = this.matrix.getPos(x, y);
-                if (e.getChar() == borderChar) newMatrix.setPos(e);
-                else if (e.getChar() == birdChar) b = e;
-                else newMatrix.setPos(new Element(x, y, ' ', "#FFFFFF"));
+                if (e.getChar() == birdChar) b = e;
+                else if (e.getChar() != ' ') newMatrix.setPos(e);
             }
 
         newMatrix.setPos(b);

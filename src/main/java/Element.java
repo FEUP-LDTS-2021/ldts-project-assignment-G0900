@@ -31,7 +31,9 @@ public class Element {
     public Character getChar(){return character;}
     public  boolean isFixedPos(){return fixedPos;}
 
-    public  void setFixedPos(boolean newFixedPos) {this.fixedPos = newFixedPos;}
+    public Element setFixedPos(boolean newFixedPos) {this.fixedPos = newFixedPos;
+        return this;
+    }
     public void setChar(Character newChar) {this.character = newChar;}
 
     public void setPos(Position newPos){

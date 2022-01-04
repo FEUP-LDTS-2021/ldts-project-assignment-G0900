@@ -47,6 +47,8 @@ public class Game {
             draw();
             KeyStroke key = screen.readInput();
             runGame = arena.processKey(key, screen);
+            arena.addRandomElem(1,Arena.coinChar);
+            arena.addRandomElem(1,Arena.blockChar);
 
         } while (runGame);
 
